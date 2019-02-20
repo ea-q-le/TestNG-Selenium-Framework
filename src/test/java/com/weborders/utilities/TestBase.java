@@ -26,7 +26,7 @@ public abstract class TestBase {
         pages = new Pages();
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         driver.manage().window().maximize();
-        driver.get(ConfigurationReader.getProperty("employees.app.url"));
+        driver.get(ConfigurationReader.getProperty("data-url"));
     }
 
     @AfterMethod (alwaysRun = true)
@@ -42,7 +42,7 @@ public abstract class TestBase {
         } else if (result.getStatus() == ITestResult.SKIP) {
             extentLogger.skip("Test Case Skipped: " + result.getName());
         }
-        //Driver.closeDriver();
+        Driver.closeDriver();
     }
 
     @BeforeTest (alwaysRun = true)
