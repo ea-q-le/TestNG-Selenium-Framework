@@ -1,8 +1,12 @@
 package excelautomation;
 
-import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.testng.annotations.Test;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 
@@ -10,26 +14,38 @@ public class ExcelWriteDemo {
 
     @Test
     public void writeExcel() throws Exception {
-        String path = "./src/test/resources/Countries.xlsx";
+        String filePath = "./src/test/resources/Countries.xlsx";
 
-        FileInputStream input = new FileInputStream(path);
-        Workbook workbook = WorkbookFactory.create(input);
+        FileInputStream in = new FileInputStream(filePath);
+        Workbook workbook = WorkbookFactory.create(in);
         Sheet worksheet = workbook.getSheetAt(0);
 
         //Write column name
-        Cell column = worksheet.getRow(0).createCell(2);
+        Cell column = worksheet.getRow(0).getCell(2);
+
+        if(column == null){
+            column = worksheet.getRow(0).createCell(2);
+        }
         column.setCellValue("Continent");
 
-        Cell continent1 = worksheet.getRow(1).createCell(2);
-        continent1.setCellValue("North America");
+
+        Cell cont1 = worksheet.getRow(1).getCell(2);
+        if (cont1 == null) {
+            cont1 = worksheet.getRow(1).createCell(2);
+        }
+        cont1.setCellValue("North America");
 
         //Save changes
-        FileOutputStream output = new FileOutputStream(path);
+        //Open the file to WRITE into it
+        FileOutputStream out = new FileOutputStream(filePath);
         //Write and save the changes
-        workbook.write(output);
+        workbook.write(out);
 
-        input.close();
-        output.close();
+        out.close();
         workbook.close();
+        in.close();
+
+
+
     }
 }

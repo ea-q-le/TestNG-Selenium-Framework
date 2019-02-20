@@ -20,16 +20,16 @@ public abstract class TestBase {
     private static ExtentHtmlReporter htmlReporter;
     protected static ExtentTest extentLogger;
 
-
-    @BeforeMethod
+    @BeforeMethod (alwaysRun = true)
     public void setupMethod() {
         driver = Driver.getDriver();
         pages = new Pages();
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-        driver.get(ConfigurationReader.getProperty("url"));
+        driver.manage().window().maximize();
+        driver.get(ConfigurationReader.getProperty("employees.app.url"));
     }
 
-    @AfterMethod
+    @AfterMethod (alwaysRun = true)
     public void tearDownMethod(ITestResult result) throws IOException {
         // if any test fails, it can detect it,
         // take a screen shot at the point and attach to report
@@ -42,10 +42,10 @@ public abstract class TestBase {
         } else if (result.getStatus() == ITestResult.SKIP) {
             extentLogger.skip("Test Case Skipped: " + result.getName());
         }
-        Driver.closeDriver();
+        //Driver.closeDriver();
     }
 
-    @BeforeTest
+    @BeforeTest (alwaysRun = true)
     public void setUpTest() {
         report = new ExtentReports();
         // this is our custom location of the report that will be generated
@@ -75,16 +75,7 @@ public abstract class TestBase {
 
     }
 
-
-
-
-
-
-
-
-
-
-    @AfterTest
+    @AfterTest (alwaysRun = true)
     public void tearDownTest() {
         report.flush();
     }

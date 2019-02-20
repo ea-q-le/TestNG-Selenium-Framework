@@ -3,37 +3,28 @@ package excelautomation;
 import com.weborders.utilities.ConfigurationReader;
 import com.weborders.utilities.Driver;
 import com.weborders.utilities.ExcelUtil;
-import org.openqa.selenium.WebDriver;
+import com.weborders.utilities.TestBase;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
-import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
-public class DataDrivenTest {
-    private WebDriver driver;
+public class DataDrivenTest extends TestBase {
+
     List<Map<String, String>> testData;
 
     @BeforeMethod
-    public void setupDriver() {
+    public void getTestData() {
         ExcelUtil excelUtil = new ExcelUtil("./src/test/resources/EmployeesTestData.xlsx","data");
         testData = excelUtil.getDataList();
-
-        driver = Driver.getDriver();
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-        driver.get(ConfigurationReader.getProperty("data-url"));
-    }
-    @AfterMethod
-    public void teardown() {
-        Driver.closeDriver();
     }
 
     @Test
     public void employeesFormTest() {
+
         for (Map<String, String> empData : testData) {
 
             EmployeesFormPage empPage = new EmployeesFormPage();
@@ -56,5 +47,7 @@ public class DataDrivenTest {
             Driver.getDriver().get(ConfigurationReader.getProperty("employees.app.url"));
 
         }
+
     }
+
 }
